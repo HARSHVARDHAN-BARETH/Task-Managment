@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
-from .models import Task
+from .models import NewTask
 from .forms import TaskForm
 
 # Create your views here.
 
 def task_list(request):
-    tasks = Task.objects.all()
+    tasks = NewTask.objects.all()
     return render(request,"task_list.html", {"tasks":tasks})
 
 def task_create(request):
