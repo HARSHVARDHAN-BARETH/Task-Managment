@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import NewTask
 from .forms import TaskForm
 
@@ -24,3 +24,24 @@ def home(request):
         {'name':'h','age':20}
     ]
     return render(request,"index.html", context={'people':people})
+
+# Task update
+def task_update(request, pk):
+    task = get_object_or_404(NewTask, pk=pk)
+    if request.method == "POST":
+        form = TaskForm(request.POST, instance=task)
+        if form.is_valid():
+            form.save()
+            return redirect('task_list')
+    else:
+        form = TaskForm(instance=task)
+    return render(request, 'task_update.html', {'form': form, 'task': task})
+
+# Task delete
+def task_delete(request, pk):
+    task = get_object_or_404(NewTask, pk=pk)
+    if request.method == "POST":
+        task.delete()
+        return redirect('task_list')
+    return render(request, 'task_delete.html', {'task': task})
+
